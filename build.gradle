@@ -1,0 +1,62 @@
+// Can't specify dynamic versions in new syntax
+//plugins {
+//    id "nebula.nebula-plugin" version "2.0.1"
+//}
+buildscript {
+    repositories { jcenter() }
+    dependencies { classpath 'com.netflix.nebula:nebula-plugin-plugin:2.+' }
+}
+
+description 'Template for qiro projects'
+apply plugin: 'nebula-plugin'
+
+contacts {
+    'benjchristensen@gmail.com' {
+        moniker 'Ben Christensen'
+        github 'benjchristensen'
+    }
+}
+
+bintray {
+  publish = true
+  dryRun = false
+  pkg {
+    repo = 'qiro'
+    userOrg = 'qiro'
+    name = project.name
+    desc = project.description
+    websiteUrl = 'https://github.com/qiro/${project.name}'
+    issueTrackerUrl = 'https://github.com/qiro/${project.name}/issues'
+    vcsUrl = 'https://github.com/qiro/${project.name}.git'
+    licenses = ['Apache-2.0']
+    labels = ['qiro', 'qiro']
+    publicDownloadNumbers = true
+    attributes = [:]
+    version {
+      name = project.version
+      vcsTag = project.version
+      attributes = [:]
+    }
+  }
+}
+
+dependencies {
+    compile 'com.netflix.nebula:nebula-project-plugin:2.+'
+    compile 'com.netflix.nebula:nebula-bintray-plugin:2.+' // for publishing
+    compile 'com.netflix.nebula:nebula-release-plugin:2.+' // for releasing
+    compile 'com.netflix.nebula:gradle-override-plugin:2.+'
+    compile 'com.netflix.nebula:nebula-publishing-plugin:2.+' // for publishing
+    compile 'com.github.jengelman.gradle.plugins:shadow:1.+'
+    compile 'nl.javadude.gradle.plugins:license-gradle-plugin:0.+'
+    compile 'com.google.guava:guava:17.0' // For ClasspathHelper
+
+    testCompile('com.netflix.nebula:nebula-test:2.+') {
+        exclude group: "org.codehaus.groovy", module: "groovy-all"
+    }
+}
+
+test {
+    minHeapSize = "128m"
+    maxHeapSize = "512m"
+    jvmArgs "-XX:MaxPermSize=512m"
+}
